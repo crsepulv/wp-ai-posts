@@ -1,0 +1,36 @@
+<!--MESSAGES-->
+<div
+  class="h-full w-full p-4 overflow-hidden overflow-y-auto flex flex-col gap-2"
+>
+  @for (message of messages; track $index) {
+
+  <article
+    [ngClass]="{
+      'bg-yellow-50': message.role === 'user',
+      'bg-white': message.role === 'assistant'
+    }"
+    class=" rounded-xl p-4 w-full border"
+  >
+    <markdown clipboard [data]="message.content" [disableSanitizer]="true">
+    </markdown>
+    {{message.role}}
+  </article>
+  }
+</div>
+<!--INPUT-->
+<form class="h-[100px] relative" [formGroup]="this.chatInput">
+  <textarea
+    class="min-h-[80px] max-h-[400px] border rounded-xl w-full absolute z-0 bottom-0 p-4"
+    placeholder="Introduce un prompt"
+    name="prompt"
+    formControlName="prompt"
+    id="prompt"
+  ></textarea>
+
+  <button
+    (click)="sendPrompt()"
+    class="px-4 py-2 bg-black text-white font-bold rounded-xl absolute bottom-5 right-5"
+  >
+    Enviar
+  </button>
+</form>

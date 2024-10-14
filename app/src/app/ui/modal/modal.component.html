@@ -1,0 +1,23 @@
+<div
+  [ngClass]="{
+    'scale-100 pointer-events-auto': isOpen,
+    'scale-0 pointer-events-none': !isOpen
+  }"
+  class="bg-white fixed z-[5] w-min h-min min-h-[100px] min-w-[300px] inset-0 m-auto rounded-xl p-4 transition-transform border"
+>
+  <header class="flex justify-end items-center">
+    <button (click)="handleToggle()" class="text-black">
+      <ng-icon name="lucideX" />
+    </button>
+  </header>
+  <ng-content />
+</div>
+
+<div
+  (click)="handleToggle()"
+  [ngClass]="{
+    'opacity-0 pointer-events-none': !isOpen,
+    'opacity-100 pointer-events-auto': isOpen
+  }"
+  class="bg-black/20 backdrop-blur-sm fixed z-[1] inset-0 h-screen w-screen transition-opacity"
+></div>
