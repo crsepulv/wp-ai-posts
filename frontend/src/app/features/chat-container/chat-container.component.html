@@ -1,0 +1,164 @@
+<div class="flex h-screen w-screen">
+  <main class="flex w-full h-full max-md:flex-col">
+    <nav class="max-md:flex hidden justify-between items-center p-4">
+      <figure>POST/AI</figure>
+      <button
+        (click)="toggleMobilePostList()"
+        class="p-2 bg-black rounded-xl inline-flex justify-center items-center text-white"
+      >
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </nav>
+    <div
+      [ngClass]="{
+        'max-md:translate-y-[100%]': !showMobilePostsList,
+        'max-md:translate-0': showMobilePostsList
+      }"
+      class="border-r w-1/4 h-full flex transition-transform flex-col gap-4 p-8 overflow-hidden overflow-y-auto max-md:bg-white max-md:z-[4] max-md:w-full max-md:fixed max-md:bottom-0"
+    >
+      <div
+        (click)="toggleMobilePostList()"
+        class="my-2 h-[5px] hidden max-md:block w-[80%] m-auto bg-neutral-300 content-normal rounded-xl"
+      ></div>
+      <div class="flex justify-between items-center">
+        <h3 class="text-3xl font-bold">Posts</h3>
+
+        <button
+          (click)="toggleNewPostSheet()"
+          class="p-2 bg-black text-white rounded-xl inline-flex justify-center items-center"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <ng-container *ngFor="let post of iterateObjectKeysAndValues(posts)">
+        <article class="flex items-center p-4 justify-between border rounded-xl">
+          <div>
+            <h4 class="max-w-[120px] overflow-hidden overflow-ellipsis">
+              {{ post.value.title }}
+            </h4>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              (click)="publishOnWordpress(post.key)"
+              [disabled]="post.value.updated"
+              class="px-4 py-2 text-sm bg-black text-white font-bold rounded-xl disabled:opacity-30"
+            >
+              <span *ngIf="post.value.updated">Publicado</span>
+              <span *ngIf="!post.value.updated && post.value.publishing">Publicando...</span>
+              <span *ngIf="!post.value.updated && !post.value.publishing">Publicar</span>
+            </button>
+
+            <button
+              (click)="openEditor(post.key)"
+              class="border border-black text-black rounded-xl inline-flex p-2 justify-center items-center"
+            >
+              <i class="fa-solid fa-pencil"></i>
+            </button>
+            <button
+              (click)="openModal(post.key)"
+              class="border border-red-500 text-red-500 rounded-xl inline-flex p-2 justify-center items-center"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </article>
+      </ng-container>
+    </div>
+    <app-chat
+      class="h-full p-8 flex flex-col bg-neutral-100 gap-4 overflow-hidden w-3/4 max-md:w-full"
+    />
+  </main>
+</div>
+<app-sheet
+  [isOpen]="postsService.newPostSheet"
+  (toggleEvent)="toggleNewPostSheet()"
+>
+  <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
+    <form
+      [formGroup]="postsService.postForm"
+      class="w-full h-full flex flex-col gap-2"
+    >
+      <h3 class="text-2xl font-bold">Nuevo Post</h3>
+      <input
+        type="text"
+        placeholder="Titulo del Post"
+        class="p-4 rounded-xl border"
+        formControlName="title"
+      />
+
+      <fieldset class="flex gap-2 w-full items-end h-full">
+        <textarea
+          name=""
+          id=""
+          placeholder="Codigo HTML del post"
+          formControlName="content"
+          class="p-4 rounded-xl border w-full h-full bg-black text-white"
+        ></textarea>
+      </fieldset>
+
+      <div class="flex items-center gap-2 justify-end">
+        <button
+          (click)="newPost()"
+          [disabled]="!postsService.postForm.valid"
+          class="bg-black text-white p-2 font-bold rounded-xl disabled:opacity-30"
+        >
+          <span *ngIf="isSaving">Guardando...</span>
+          <span *ngIf="!isSaving"> Guardar </span>
+        </button>
+        <button
+          [disabled]="!postsService.postForm.valid"
+          (click)="saveNewPostOnWordpress()"
+          class="bg-white border-black border text-black p-2 font-bold rounded-xl disabled:opacity-30"
+        >
+          <span *ngIf="isPublishing && !error"> Publicando... </span>
+          <span *ngIf="error && !isPublishing">Sorry</span>
+          <span *ngIf="!isPublishing && !error"> Publicar </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</app-sheet>
+
+<app-sheet
+  [isOpen]="postsService.editPostSheet"
+  (toggleEvent)="toggleEditPostSheet()"
+>
+  <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
+    <form
+      [formGroup]="postsService.postForm"
+      class="w-full h-full flex flex-col gap-2"
+    >
+      <h3 class="text-2xl font-bold">Editar</h3>
+      <input
+        type="text"
+        placeholder="Titulo del Post"
+        class="p-4 rounded-xl border"
+        formControlName="title"
+      />
+
+      <fieldset class="flex gap-2 w-full items-end h-full">
+        <textarea
+          name=""
+          id=""
+          placeholder="Codigo HTML del post"
+          formControlName="content"
+          class="p-4 rounded-xl border w-full h-full bg-black text-white"
+        ></textarea>
+      </fieldset>
+
+      <div class="flex items-center gap-2 justify-end">
+        <button
+          (click)="editPost()"
+          [disabled]="!postsService.postForm.valid"
+          class="bg-black text-white p-2 font-bold rounded-xl disabled:opacity-30"
+        >
+          <span *ngIf="isSaving">Guardando...</span>
+          <span *ngIf="!isSaving"> Guardar </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</app-sheet>
+
+<app-modal [isOpen]="modalOpen" (toggleEvent)="toggleModal()">

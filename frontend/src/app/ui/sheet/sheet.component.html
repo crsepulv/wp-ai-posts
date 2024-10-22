@@ -1,0 +1,23 @@
+<div
+  [ngClass]="{
+    'translate-y-0': isOpen,
+    'translate-y-[100%]': !isOpen
+  }"
+  class="bg-white fixed bottom-0 z-[5] inset-x-0 h-3/4 w-screen p-2 transition-transform border-t"
+>
+  <header class="flex justify-end items-center">
+    <button (click)="handleToggle()" class="text-black">
+      <i class="fa-solid fa-x"></i>
+    </button>
+  </header>
+  <ng-content />
+</div>
+
+<div
+  (click)="handleToggle()"
+  [ngClass]="{
+    'opacity-0 pointer-events-none': !isOpen,
+    'opacity-100 pointer-events-auto': isOpen
+  }"
+  class="bg-black/20 backdrop-blur-sm fixed z-[1] inset-0 h-screen w-screen transition-opacity"
+></div>
