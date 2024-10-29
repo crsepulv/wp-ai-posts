@@ -18,7 +18,7 @@ import { PostsService } from '../../services/posts.service';
       <p class="text-red-500">{{ postsService.error.message }}</p>
       <button
         (click)="closeAlert()"
-        class="hover:opacity-80 inline-flex justify-center items-center"
+        class="hover:opacity-80 inline-flex justify-center items-center transition-opacity"
       >
         <i class="fa-solid fa-x"></i>
       </button>

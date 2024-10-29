@@ -23,7 +23,7 @@ import { HttpClient } from '@angular/common/http';
     RouterModule,
     ModalComponent,
   ],
- 
+
   templateUrl: './scrapper.component.html',
 })
 export class ScrapperComponent implements OnInit {
@@ -62,7 +62,6 @@ export class ScrapperComponent implements OnInit {
     protected router: Router,
     protected http: HttpClient
   ) {
-
     this.addPostForm = fb.group({
       title: ['', [Validators.required]],
     });
@@ -72,7 +71,14 @@ export class ScrapperComponent implements OnInit {
     });
 
     this.scrappingForm = fb.group({
-      url: ['', [Validators.required, Validators.pattern('https?://.+'), Validators.minLength(5)]],
+      url: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('https?://.+'),
+          Validators.minLength(5),
+        ],
+      ],
     });
 
     this.resumeForm = fb.group({
@@ -82,7 +88,7 @@ export class ScrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      this.getPostsFromLocalStorage();
+    this.getPostsFromLocalStorage();
   }
 
   getPostsFromLocalStorage() {
@@ -167,9 +173,7 @@ export class ScrapperComponent implements OnInit {
 
             console.error(`Error al publicar el post "${title}":`, error);
             post.status = 'error'; // Marca el post como fallido si hubo un error
-            this.postsService.handleError(
-              'No se puedo publicar el post.'
-            );
+            this.postsService.handleError('No se puedo publicar el post.');
           },
           complete: () => {
             this.isPublishing = false;
@@ -182,7 +186,6 @@ export class ScrapperComponent implements OnInit {
   fetchInfo(): void {
     this.isScrapping = true;
     const url = this.scrappingForm.get('url')?.value;
-
 
     this.postsService.extractInfo(url).subscribe({
       next: (data) => {
@@ -211,8 +214,7 @@ export class ScrapperComponent implements OnInit {
           },
           complete: () => {
             this.isScrapping = false;
-
-          }
+          },
         });
       },
       error: (error) => {

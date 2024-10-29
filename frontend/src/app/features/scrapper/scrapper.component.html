@@ -1,57 +1,3 @@
-<app-sheet [isOpen]="resumeSheetIsOpen" (toggleEvent)="toggleResumeSheet()">
-  <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
-    <form [formGroup]="resumeForm" class="flex flex-col gap-2">
-      <label class="text-4xl font-bold" for="">Resumen</label>
-      <label for="">Plabras Claves</label>
-
-      <div class="flex items-center gap-2 flex-wrap p-2 rounded-md border">
-        <p
-          class="bg-black font-bold text-white p-2 rounded-md"
-          *ngFor="
-            let item of keyWords;
-            track: index;
-            let index = index;
-            let last = last
-          "
-        >
-          {{ item }}
-
-          <button (click)="removeKeyword(index)" class="inline-flex">
-            <i class="fa-solid fa-x"></i>
-          </button>
-        </p>
-
-        <div class="border rounded-md p-2 inline-flex">
-          <input type="text" class="border-none" formControlName="keyword" />
-          <button
-            (click)="addKeyword()"
-            class="bg-white text-black inline-flex justify-center items-center"
-          >
-            <i class="fa-solid fa-plus"></i>
-          </button>
-        </div>
-      </div>
-
-      <label for=""> Resumen</label>
-      <textarea
-        placeholder="description"
-        class="border rounded-md p-2 w-full min-h-[100px]"
-        formControlName="description"
-      ></textarea>
-
-      <button
-        class="px-4 py-2 bg-white border border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
-        (click)="getListOfPosts()"
-      >
-        <span *ngIf="isGenerating"
-          >Generando... <i class="fa-solid fa-spinner animate-spin"></i>
-        </span>
-        <span *ngIf="!isGenerating">Generar Titulos</span>
-      </button>
-    </form>
-  </div>
-</app-sheet>
-
 <div class="h-auto flex flex-col mx-auto w-1/2">
   <div class="w-full min-h-screen h-screen flex justify-center items-center">
     <form class="flex flex-col gap-2 w-full" [formGroup]="scrappingForm">
@@ -69,7 +15,7 @@
       <button
         (click)="fetchInfo()"
         [disabled]="!scrappingForm.valid"
-        class="px-4 py-2 bg-black rounded-md text-white font-bold hover:bg-black/80 transition-colors disabled:bg-black/30"
+        class="px-4 py-2 bg-black rounded-md text-white font-bold hover:opacity-80 transition-opacity disabled:opacity-50"
       >
         <span *ngIf="isScrapping"
           >Obteniendo información del sitio...
@@ -77,16 +23,61 @@
         >
         <span *ngIf="!isScrapping">Obtener Resumen</span>
       </button>
+    </form>
+  </div>
 
-      <div class="flex justify-center items-center gap-2">
-        <p>- O -</p>
+  <div class="w-full h-screen min-h-screen">
+    <form [formGroup]="resumeForm" class="flex flex-col gap-2">
+      <label class="text-4xl font-bold" for="">Resumen</label>
+      <label for="">Plabras Claves</label>
+
+      <div class="flex items-center gap-2 flex-wrap p-2 rounded-md border">
+        <p
+          class="bg-black font-bold text-white p-2 rounded-md"
+          *ngFor="
+            let item of keyWords;
+            track: index;
+            let index = index;
+            let last = last
+          "
+        >
+          {{ item }}
+
+          <button
+            (click)="removeKeyword(index)"
+            type="button"
+            class="inline-flex hover:opacity-80 transition-opacity"
+          >
+            <i class="fa-solid fa-x"></i>
+          </button>
+        </p>
+
+        <div class="border rounded-md p-2 inline-flex">
+          <input type="text" class="border-none" formControlName="keyword"  />
+          <button
+            (click)="addKeyword()"
+            class="bg-white text-black inline-flex justify-center items-center hover:opacity-80 transition-opacity"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
 
+      <label for=""> Resumen</label>
+      <textarea
+        placeholder="description"
+        class="border rounded-md p-2 w-full min-h-[100px]"
+        formControlName="description"
+      ></textarea>
+
       <button
-        class="px-4 py-2 bg-white border border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
-        (click)="toggleResumeSheet()"
+        class="px-4 py-2 bg-white border border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-50 transition-opacity"
+        (click)="getListOfPosts()"
       >
-        Configurar Resumen
+        <span *ngIf="isGenerating"
+          >Generando... <i class="fa-solid fa-spinner animate-spin"></i>
+        </span>
+        <span *ngIf="!isGenerating">Generar Titulos</span>
       </button>
     </form>
   </div>
@@ -99,14 +90,14 @@
       <div class="flex items-center gap-2">
         <button
           (click)="toggleAddSheet()"
-          class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white"
+          class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white hover:opacity-80 transition-opacity"
         >
           <i class="fa-solid fa-plus"></i>
         </button>
 
         <button
           (click)="toggleDeleteModalAll()"
-          class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white"
+          class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white hover:opacity-80 transition-opacity"
         >
           <i class="fa-solid fa-brush"></i>
         </button>
@@ -117,29 +108,36 @@
         class="border p-2 flex justify-between items-center"
         *ngFor="let item of posts; track: index; let index = index"
       >
-        <div class="flex items-center gap-4">
-          <h4
-            class="max-w-[300px] overflow-hidden overflow-ellipsis text-nowrap"
-          >
+        <div class="w-full flex items-start justify-between gap-4 pr-4">
+          <h4 class="w-auto overflow-hidden overflow-ellipsis text-wrap">
             {{ item.title }}
           </h4>
 
-          <span>{{
-            item.content.length <= 0 ? "Sin contenido" : "Contenido Cargado"
-          }}</span>
+          <span
+            class="font-bold text-nowrap"
+            [ngClass]="{
+              'text-red-500': item.content.length <= 0,
+              'text-black': item.content.length > 0
+            }"
+            >{{
+              item.content.length <= 0
+                ? "(Sin Contenido HTML)"
+                : "Contenido Cargado"
+            }}</span
+          >
         </div>
 
         <div class="flex items-center gap-2">
           <button
             (click)="setEditValues(index)"
-            class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white"
+            class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white hover:opacity-80 transition-opacity"
           >
             <i class="fa-solid fa-pencil"></i>
           </button>
 
           <button
             (click)="openConfirmationDeleteModal(index)"
-            class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white"
+            class="p-2 inline-flex rounded-md justify-center items-center bg-black text-white hover:opacity-80 transition-opacity"
           >
             <i class="fa-regular fa-trash-can"></i>
           </button>
@@ -149,18 +147,18 @@
       <button
         [disabled]="posts.length <= 0"
         (click)="generatePosts()"
-        class="bg-white border text-black font-bold inline-flex justify-center items-center px-4 py-2 rounded-md disabled:opacity-80"
+        class="bg-white border text-black font-bold inline-flex justify-center items-center px-4 py-2 rounded-md disabled:opacity-50 hover:opacity-80 transition-opacity"
       >
         <span *ngIf="isGeneratingPosts"
           >Generando... <i class="fa-solid fa-spinner animate-spin"></i
         ></span>
-        <span *ngIf="!isGeneratingPosts">Generar Posts</span>
+        <span *ngIf="!isGeneratingPosts">Generar Posts (Contenido)</span>
       </button>
       <div class="flex justify-between items-center gap-2">
         <button
           [disabled]="posts.length <= 0"
           (click)="publish()"
-          class="bg-black w-full text-white font-bold inline-flex justify-center items-center px-4 py-2 rounded-md disabled:bg-black/80"
+          class="bg-black w-full text-white font-bold inline-flex justify-center items-center px-4 py-2 rounded-md disabled:opacity-50 hover:opacity-80 transition-opacity"
         >
           <span *ngIf="isPublishing"
             >publicando...<i class="fa-solid fa-spinner animate-spin"></i
@@ -171,9 +169,9 @@
 
         <button
           (click)="this.postsService.openConf = true"
-          class="bg-black text-white font-bold inline-flex justify-center items-center p-3 rounded-md disabled:bg-black/80"
+          class="bg-black text-white font-bold inline-flex justify-center items-center p-3 rounded-md disabled:opacity-50 hover:opacity-80 transition-opacity"
         >
-          <i class="fa-solid fa-gear"></i>
+         <i class="fa-brands fa-wordpress"></i>
         </button>
       </div>
     </div>
@@ -182,19 +180,24 @@
 
 <app-sheet [isOpen]="addSheetIsOpen" (toggleEvent)="toggleAddSheet()">
   <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
-    <form [formGroup]="addPostForm">
-      <label class="text-4xl font-bold" for="">Titulo</label>
+    <form [formGroup]="addPostForm" class="flex flex-col gap-2">
+      <h2 class="text-2xl font-bold">Añadir Titulo:</h2>
+
+      <label class="text-lg font-bold text-neutral-500" for="add-title"
+        >Titulo del post</label
+      >
 
       <input
-        placeholder="titulo"
+        placeholder="Ej: Top 10 alimentos mas sanos del mundo."
         type="text"
         class="border rounded-md p-2 w-full"
         formControlName="title"
+        id="add-title"
       />
 
       <button
         (click)="addPost()"
-        class="px-4 py-2 bg-white border border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
+        class="px-4 py-2 bg-white border self-end border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
       >
         <span *ngIf="isGenerating"
           >Guardando... <i class="fa-solid fa-spinner animate-spin"></i>
@@ -207,19 +210,23 @@
 
 <app-sheet [isOpen]="editSheetIsOpen" (toggleEvent)="toggleEditSheet()">
   <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
-    <form [formGroup]="editPostForm">
-      <label class="text-4xl font-bold" for="">Titulo</label>
+    <form [formGroup]="editPostForm" class="flex flex-col gap-2">
+      <h2 class="text-2xl font-bold">Editar Titulo:</h2>
+      <label class="text-lg font-bold text-neutral-500" for="edit-title"
+        >Titulo del post</label
+      >
 
       <input
         placeholder="titulo"
         type="text"
         class="border rounded-md p-2 w-full"
         formControlName="title"
+        id="edit-title"
       />
 
       <button
         (click)="editPost()"
-        class="px-4 py-2 bg-white border border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
+        class="px-4 py-2 bg-white border self-end border-black rounded-md text-black font-bold hover:opacity-80 disabled:opacity-30 transition-opacity"
       >
         <span *ngIf="isGenerating"
           >Editando... <i class="fa-solid fa-spinner animate-spin"></i>
@@ -236,13 +243,13 @@
     <div class="flex justify-center items-center gap-4">
       <button
         (click)="deletePost()"
-        class="bg-black px-4 py-2 rounded-xl text-white font-bold"
+        class="bg-black px-4 py-2 rounded-xl text-white font-bold hover:opacity-80 transition-opacity"
       >
         Confirmar
       </button>
       <button
         (click)="toggleModal()"
-        class="bg-red-500 px-4 py-2 rounded-xl text-white font-bold"
+        class="bg-red-500 px-4 py-2 rounded-xl text-white font-bold hover:opacity-80 transition-opacity"
       >
         Cancelar
       </button>
@@ -256,13 +263,13 @@
     <div class="flex justify-center items-center gap-4">
       <button
         (click)="deleteAllPosts()"
-        class="bg-black px-4 py-2 rounded-xl text-white font-bold"
+        class="bg-black px-4 py-2 rounded-xl text-white font-bold hover:opacity-80 transition-opacity"
       >
         Confirmar
       </button>
       <button
         (click)="toggleDeleteModalAll()"
-        class="bg-red-500 px-4 py-2 rounded-xl text-white font-bold"
+        class="bg-red-500 px-4 py-2 rounded-xl text-white font-bold hover:opacity-80 transition-opacity"
       >
         Cancelar
       </button>

@@ -1,0 +1,51 @@
+<main class="w-screen h-screen overflow-x-hidden">
+  <router-outlet />
+
+  <app-sheet [isOpen]="this.postsService.openConf" (toggleEvent)="openConf()">
+    <div class="w-full h-[90%] m-auto overflow-hidden overflow-y-auto px-2">
+      <form
+        [formGroup]="this.postsService.confForm"
+        class="flex w-full flex-col gap-2"
+      >
+      <h2 class="text-2xl font-bold">Configuración de Acceso a Wordpress</h2>
+
+        <label class="text-lg font-bold text-neutral-500" for="add-title"
+          >Nombre de usuario (wordpress)</label
+        >
+        <input
+          type="text"
+          formControlName="user"
+          class="p-2 border rounded-md"
+          placeholder="Ej: usuario_wordpress_00"
+        />
+        <label class="text-lg font-bold text-neutral-500" for="add-title"
+          >Contraseña (wordpress)</label
+        >
+        <input
+          type="password"
+          formControlName="password"
+          class="p-2 border rounded-md"
+          placeholder="Ej: xOAC rG9s Oylp QVlE 63JÑ 3XOw"
+        />
+        <label class="text-lg font-bold text-neutral-500" for="add-title"
+          >URL (wordpress)</label
+        >
+        <input
+          type="text"
+          formControlName="url"
+          class="p-2 border rounded-md"
+          placeholder="Ej: https://ejemplo.com/test/index.php/wp-json/wp/v2/posts/"
+        />
+
+        <button
+          [disabled]="!this.postsService.confForm.valid"
+          (click)="saveConf()"
+          class="rounded-md justify-self-end self-end bg-black px-4 py-2 text-white font-bold hover:opacity-80 disabled:opacity-30"
+        >
+          Guardar
+        </button>
+      </form>
+    </div>
+  </app-sheet>
+  <app-alert />
+</main>
