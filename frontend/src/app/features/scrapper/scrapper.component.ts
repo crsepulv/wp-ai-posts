@@ -157,9 +157,10 @@ export class ScrapperComponent implements OnInit {
       for (const post of this.posts) {
         const title = post.title;
         const content = post.content;
+        const status = post.status;
 
         // Llamar al servicio para publicar el post en WordPress
-        this.postsService.publishPostOnWordpress(title, content).subscribe({
+        this.postsService.publishPostOnWordpress(title, content, status).subscribe({
           next: (response) => {
             console.log(
               `Post "${title}" publicado con éxito en WordPress`,

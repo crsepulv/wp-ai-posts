@@ -20,6 +20,7 @@ export class PostsService {
   WP_USER: string = '';
   WP_PASSWORD: string = '';
   WP_URL: string = '';
+  WP_STATUS: string = ''
 
   openConf = false;
 
@@ -49,6 +50,7 @@ export class PostsService {
       user: ['', Validators.required],
       password: ['', Validators.required],
       url: ['', Validators.required],
+      status: ['', Validators.required]
     });
   }
 
@@ -71,13 +73,13 @@ export class PostsService {
     });
   }
 
-  publishPostOnWordpress(title: string, content: string): Observable<any> {
+  publishPostOnWordpress(title: string, content: string, status: string): Observable<any> {
     const encodedCredentials = btoa(`${this.WP_USER}:${this.WP_PASSWORD}`);
     const authHeader = `Basic ${encodedCredentials}`;
 
     return this.http.post(
       this.WP_URL,
-      { title, content, status: 'publish' },
+      { title, content, status },
       {
         headers: {
           Authorization: authHeader,

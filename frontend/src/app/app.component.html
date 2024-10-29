@@ -7,7 +7,7 @@
         [formGroup]="this.postsService.confForm"
         class="flex w-full flex-col gap-2"
       >
-      <h2 class="text-2xl font-bold">Configuración de Acceso a Wordpress</h2>
+        <h2 class="text-2xl font-bold">Añade tu sitio Wordpress</h2>
 
         <label class="text-lg font-bold text-neutral-500" for="add-title"
           >Nombre de usuario (wordpress)</label
@@ -36,6 +36,21 @@
           class="p-2 border rounded-md"
           placeholder="Ej: https://ejemplo.com/test/index.php/wp-json/wp/v2/posts/"
         />
+
+        <label class="text-lg font-bold text-neutral-500" for="add-title"
+          >Estatus</label
+        >
+
+        <select
+          name=""
+          id=""
+          formControlName="status"
+          class="p-2 border rounded-md"
+        >
+          <option [defaultSelected]="true">Seleccionar Estatus</option>
+          <option value="draft">Draft</option>
+          <option value="publish">Publish</option>
+        </select>
 
         <button
           [disabled]="!this.postsService.confForm.valid"

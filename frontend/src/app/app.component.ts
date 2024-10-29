@@ -21,10 +21,12 @@ export class AppComponent implements OnInit {
     const user = this.postsService.confForm.get('user')?.value;
     const password = this.postsService.confForm.get('password')?.value;
     const url = this.postsService.confForm.get('url')?.value;
+    const status = this.postsService.confForm.get('status')?.value;
 
     this.postsService.WP_USER = user;
     this.postsService.WP_PASSWORD = password;
     this.postsService.WP_URL = url;
+    this.postsService.WP_STATUS = status
 
     this.setConfInLocalStorage(user, password, url);
 
