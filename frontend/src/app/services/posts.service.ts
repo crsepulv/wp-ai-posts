@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -20,7 +20,8 @@ export class PostsService {
   WP_USER: string = '';
   WP_PASSWORD: string = '';
   WP_URL: string = '';
-  WP_STATUS: string = ''
+  WP_STATUS: string = '';
+  WP_CATEGORY: string = '';
 
   openConf = false;
 
@@ -50,7 +51,8 @@ export class PostsService {
       user: ['', Validators.required],
       password: ['', Validators.required],
       url: ['', Validators.required],
-      status: ['', Validators.required]
+      status: ['', Validators.required],
+      category: ['', Validators.required],
     });
   }
 
@@ -73,13 +75,22 @@ export class PostsService {
     });
   }
 
-  publishPostOnWordpress(title: string, content: string, status: string): Observable<any> {
+  getCategoriesFromWordpress() {
+    const categoriesUrl = this.WP_URL.replace('posts', 'categories');
+    return this.http.get(categoriesUrl);
+  }
+
+  publishPostOnWordpress(
+    title: string,
+    content: string,
+    
+  ): Observable<any> {
     const encodedCredentials = btoa(`${this.WP_USER}:${this.WP_PASSWORD}`);
     const authHeader = `Basic ${encodedCredentials}`;
 
     return this.http.post(
       this.WP_URL,
-      { title, content, status },
+      { title, content, status: this.WP_STATUS, categories: [this.WP_CATEGORY] },
       {
         headers: {
           Authorization: authHeader,

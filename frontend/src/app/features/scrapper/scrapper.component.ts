@@ -1,5 +1,5 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,12 @@ import { SheetComponent } from '../../ui/sheet/sheet.component';
 import { Router, RouterModule } from '@angular/router';
 import { ModalComponent } from '../../ui/modal/modal.component';
 import { HttpClient } from '@angular/common/http';
+
+type Category = {
+  id: number;
+  name: string;
+  slug: string;
+};
 
 @Component({
   selector: 'app-root',
@@ -53,6 +59,8 @@ export class ScrapperComponent implements OnInit {
   confirmDeleteAll: boolean = false;
   isPublishing: boolean = false;
   isGeneratingPosts = false;
+
+  categories: Category[] = [];
 
   keywordForm!: FormGroup;
 
@@ -143,6 +151,7 @@ export class ScrapperComponent implements OnInit {
   }
 
   publish() {
+
     console.log(this.postsService.WP_URL);
     console.log(this.postsService.WP_USER);
     console.log(this.postsService.WP_PASSWORD);
@@ -157,29 +166,30 @@ export class ScrapperComponent implements OnInit {
       for (const post of this.posts) {
         const title = post.title;
         const content = post.content;
-        const status = post.status;
 
         // Llamar al servicio para publicar el post en WordPress
-        this.postsService.publishPostOnWordpress(title, content, status).subscribe({
-          next: (response) => {
-            console.log(
-              `Post "${title}" publicado con éxito en WordPress`,
-              response
-            );
-            post.status = 'published'; // Marca el post como publicado
-            post.id = response.id; // Asigna el ID de WordPress
-          },
-          error: (error) => {
-            this.isPublishing = false;
+        this.postsService
+          .publishPostOnWordpress(title, content)
+          .subscribe({
+            next: (response) => {
+              console.log(
+                `Post "${title}" publicado con éxito en WordPress`,
+                response
+              );
+              post.status = 'published'; // Marca el post como publicado
+              post.id = response.id; // Asigna el ID de WordPress
+            },
+            error: (error) => {
+              this.isPublishing = false;
 
-            console.error(`Error al publicar el post "${title}":`, error);
-            post.status = 'error'; // Marca el post como fallido si hubo un error
-            this.postsService.handleError('No se puedo publicar el post.');
-          },
-          complete: () => {
-            this.isPublishing = false;
-          },
-        });
+              console.error(`Error al publicar el post "${title}":`, error);
+              post.status = 'error'; // Marca el post como fallido si hubo un error
+              this.postsService.handleError('No se puedo publicar el post.');
+            },
+            complete: () => {
+              this.isPublishing = false;
+            },
+          });
       }
     }
   }

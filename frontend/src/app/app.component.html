@@ -34,6 +34,7 @@
           type="text"
           formControlName="url"
           class="p-2 border rounded-md"
+          (keyup)="handleCategories()"
           placeholder="Ej: https://ejemplo.com/test/index.php/wp-json/wp/v2/posts/"
         />
 
@@ -47,9 +48,30 @@
           formControlName="status"
           class="p-2 border rounded-md"
         >
-          <option [defaultSelected]="true">Seleccionar Estatus</option>
           <option value="draft">Draft</option>
           <option value="publish">Publish</option>
+        </select>
+
+        <label class="text-lg font-bold text-neutral-500" for="add-title"
+          >Categoria</label
+        >
+
+        <select
+          name=""
+          id=""
+          formControlName="category"
+          class="p-2 border rounded-md"
+        >
+        <div *ngIf="categories.length > 0">
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </div>
+        <div *ngIf="categories.length <= 0">
+          <option value="Uncategorized">
+            Uncategorized
+          </option>
+        </div>
         </select>
 
         <button
